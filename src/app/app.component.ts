@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
  import * as Stomp from 'stompjs';
  import * as SockJS from 'sockjs-client';
+ import { API_URL } from 'src/environments/environment';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class AppComponent implements OnInit {
   monthlyPayment: number;
   private stompClient;
 
-  constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.initializeWebSocketConnection();
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
   
 
   calculate() {
-    this.http.post<any>(this.apiUrl+'/simulate',{
+    this.http.post<any>(API_URL+'/simulate',{
       amount: this.amount,
       interest: this.interest,
       period: this.period
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit {
   }
 
   getAllCashedValues() {
-    this.http.get<Map<String, Object>>(this.apiUrl+"/simulate/all-cashed-simulations").subscribe(data  => {
+    this.http.get<Map<String, Object>>(API_URL+"/simulate/all-cashed-simulations").subscribe(data  => {
       console.log( data);
       Object.keys(data).forEach(key => {
 
@@ -49,7 +50,7 @@ export class AppComponent implements OnInit {
   initializeWebSocketConnection(): any {
     console.log('connected to ws ...');
   
-     const ws = new SockJS(this.apiUrl);
+     const ws = new SockJS(API_URL);
   
      this.stompClient = Stomp.over(ws);
 

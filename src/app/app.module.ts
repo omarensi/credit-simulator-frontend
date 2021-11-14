@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { environment } from 'src/environments/environment';
 
 
 
@@ -20,7 +19,7 @@ import { environment } from 'src/environments/environment';
     FormsModule,
     HttpClientModule
   ],
-  providers: [{provide: 'API_URL', useValue: environment.apiUrl}],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
