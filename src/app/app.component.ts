@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
  import * as Stomp from 'stompjs';
  import * as SockJS from 'sockjs-client';
- import * as Socket from 'socket.io-client';
 
 
 @Component({
@@ -19,7 +17,7 @@ export class AppComponent implements OnInit {
   monthlyPayment: number;
   private stompClient;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) { }
 
   ngOnInit(): void {
     this.initializeWebSocketConnection();
@@ -29,7 +27,7 @@ export class AppComponent implements OnInit {
   
 
   calculate() {
-    this.http.post<any>('http://localhost:8080/simulate',{
+    this.http.post<any>(this.apiUrl+'/simulate',{
       amount: this.amount,
       interest: this.interest,
       period: this.period
@@ -39,7 +37,7 @@ export class AppComponent implements OnInit {
   }
 
   getAllCashedValues() {
-    this.http.get<Map<String, Object>>("http://localhost:8080/simulate/all-cashed-simulations").subscribe(data  => {
+    this.http.get<Map<String, Object>>(this.apiUrl+"/simulate/all-cashed-simulations").subscribe(data  => {
       console.log( data);
       Object.keys(data).forEach(key => {
 
@@ -51,7 +49,7 @@ export class AppComponent implements OnInit {
   initializeWebSocketConnection(): any {
     console.log('connected to ws ...');
   
-     const ws = new SockJS("http://localhost:8080");
+     const ws = new SockJS(this.apiUrl);
   
      this.stompClient = Stomp.over(ws);
 
@@ -68,22 +66,7 @@ export class AppComponent implements OnInit {
     });
    }
   
-    // const that = this;
-  
-    // this.stompClient.connect({}, (frame) => {
-    //   that.stompClient.subscribe(`/queue/new-order`, (order) => {
-    //     let userId = order.body.split(" ")[0];
-    //     if (this.auth.readToken().userId != userId) {
-    //       this.snackBar.open(order.body, "", {
-    //         duration: 3000,
-    //         verticalPosition: "top",
-    //         horizontalPosition: "center"
-    //       });
-    //     }
-    //   });
-    // }, (err) => {
-    //   console.log(err);
-    // });
+
   
 
 

@@ -5,9 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import {Stomp} from "stompjs";
 
-import SockJS from 'sockjs-client';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -21,7 +20,7 @@ import SockJS from 'sockjs-client';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{provide: 'API_URL', useValue: environment.apiUrl}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
